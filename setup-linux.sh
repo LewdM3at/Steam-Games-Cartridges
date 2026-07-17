@@ -89,15 +89,25 @@ echo "=========================================="
 echo ""
 echo "Create cartridges with:"
 echo ""
-echo "  launch.sh"
+echo "  cartridge.json"
 echo ""
 echo "Example:"
 echo ""
-echo "  #!/bin/bash"
-echo "  steam steam://rungameid/12345"
+echo "  {"
+echo '    "version": 1,'
+echo '    "name": "Cyberpunk 2077",'
+echo '    "action": "run",'
+echo '    "steamAppId": "1091500",'
+echo '    "hashValidationEnabled": false'
+echo "  }"
 echo ""
 echo "The SSD must be automatically mounted by"
 echo "your desktop environment."
+echo ""
+echo "The cartridge must contain:"
+echo ""
+echo "  cartridge.json"
+echo "  SteamLibrary/steamapps/appmanifest_<steamAppId>.acf"
 echo ""
 echo "If your distro does not automount drives,"
 echo "configure automount manually or install"

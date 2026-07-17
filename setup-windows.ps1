@@ -128,20 +128,27 @@ Write-Host ""
 Write-Host "Create cartridges with:"
 Write-Host ""
 
-Write-Host "  launch.ps1"
+Write-Host "  cartridge.json"
 Write-Host ""
 
 Write-Host "Example:"
 Write-Host ""
 
-Write-Host '  Start-Process "steam://rungameid/1091500"'
+Write-Host '  {'
+Write-Host '    "version": 1,'
+Write-Host '    "name": "Cyberpunk 2077",'
+Write-Host '    "action": "run",'
+Write-Host '    "steamAppId": "1091500",'
+Write-Host '    "hashValidationEnabled": false'
+Write-Host '  }'
 
 Write-Host ""
 
 Write-Host "The cartridge SSD must contain:"
 Write-Host ""
 
-Write-Host "  launch.ps1"
+Write-Host "  cartridge.json"
+Write-Host "  SteamLibrary\steamapps\appmanifest_<steamAppId>.acf"
 
 Write-Host ""
 

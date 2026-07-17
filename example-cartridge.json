@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "name": "Cyberpunk 2077",
+  "action": "run",
+  "steamAppId": "1091500",
+  "hashValidationEnabled": false
+}
