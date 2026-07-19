@@ -59,7 +59,7 @@ else
     USERNAME="$USER"
 fi
 
-USER_HOME=$(eval echo "~$USERNAME")
+USER_HOME=$(getent passwd "$USERNAME" | cut -d: -f6)
 
 echo "Removing config directory..."
 

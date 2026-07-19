@@ -51,6 +51,20 @@ function Get-FileHashSHA256 {
 }
 
 
+function Get-TrustEntryHash {
+    param(
+        [string]$Line
+    )
+
+    # Trust entries look like "HASH|Label|Date|Path". Older installs may
+    # still have bare-hash-only lines, so fall back to the whole line.
+    if ($Line -match '\|') {
+        return ($Line -split '\|')[0].Trim()
+    }
+
+    return $Line.Trim()
+}
+
 function Is-TrustedScript {
     param(
         [string]$Hash
@@ -60,9 +74,57 @@ function Is-TrustedScript {
         return $false
     }
 
-    $TrustedHashes = Get-Content $TrustFile
+    foreach ($Line in (Get-Content $TrustFile)) {
 
-    return $TrustedHashes -contains $Hash
+        if ([string]::IsNullOrWhiteSpace($Line)) {
+            continue
+        }
+
+        if ((Get-TrustEntryHash $Line) -eq $Hash) {
+            return $true
+        }
+    }
+
+    return $false
+}
+
+function Add-TrustedScript {
+    param(
+        [string]$Hash,
+        [string]$Label,
+        [string]$Path
+    )
+
+    $Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $SafeLabel = $Label -replace '\|', '/'
+
+    Add-Content -Path $TrustFile -Value "$Hash|$SafeLabel|$Timestamp|$Path"
+}
+
+function Confirm-TrustPrompt {
+    param(
+        [string]$Drive,
+        [string]$Label,
+        [string]$Path,
+        [string]$Hash
+    )
+
+    Add-Type -AssemblyName System.Windows.Forms | Out-Null
+
+    $Message = "A new Steam Game Cartridge script was detected.`n`n" +
+        "Drive:  $Drive ($Label)`n" +
+        "Script: $Path`n" +
+        "SHA256: $Hash`n`n" +
+        "Do you want to trust and run this script?"
+
+    $Result = [System.Windows.Forms.MessageBox]::Show(
+        $Message,
+        "Steam Game Cartridge - Untrusted script",
+        [System.Windows.Forms.MessageBoxButtons]::YesNo,
+        [System.Windows.Forms.MessageBoxIcon]::Warning
+    )
+
+    return $Result -eq [System.Windows.Forms.DialogResult]::Yes
 }
 
 function Get-Mode {
@@ -92,7 +154,7 @@ function Get-Mode {
 Write-Log "Steam Game Cartridge monitor started."
 
 
-Register-WmiEvent `
+$null = Register-WmiEvent `
     -Class Win32_VolumeChangeEvent `
     -SourceIdentifier "SteamGameCartridge" `
     -Action {
@@ -166,9 +228,29 @@ Register-WmiEvent `
 
             if (-not (Is-TrustedScript $hash)) {
 
-                Write-Log "Blocked untrusted cartridge."
+                Write-Log "Untrusted cartridge detected. Prompting user."
 
-                return
+                $label = "Unknown"
+                try {
+                    $vol = Get-Volume -DriveLetter $drive.Substring(0, 1) -ErrorAction Stop
+                    if (-not [string]::IsNullOrWhiteSpace($vol.FileSystemLabel)) {
+                        $label = $vol.FileSystemLabel
+                    }
+                }
+                catch {}
+
+                $trust = Confirm-TrustPrompt -Drive $drive -Label $label -Path $launcher -Hash $hash
+
+                if (-not $trust) {
+
+                    Write-Log "User declined to trust cartridge."
+
+                    return
+                }
+
+                Add-TrustedScript -Hash $hash -Label $label -Path $launcher
+
+                Write-Log "User trusted cartridge. Added to trust file."
             }
 
 

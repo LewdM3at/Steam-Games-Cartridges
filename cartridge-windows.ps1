@@ -72,15 +72,16 @@ function Show-Menu {
     Write-Host "        ├────────────────────────────────────────┤"
     Write-Host "        │   1) Install                           │"
     Write-Host "        │   2) Trust Scripts                     │"
+    Write-Host "        │   3) View Trusted Scripts              │"
 
-    Write-Host -NoNewline "        │   3) Auto-Launch scripts: "
+    Write-Host -NoNewline "        │   4) Auto-Launch scripts: "
 
     Write-Host -NoNewline $ModeText -ForegroundColor $ModeColor
 
     Write-Host "          │"
 
-    Write-Host "        │   4) Uninstall                         │"
-    Write-Host "        │   5) Exit                              │"
+    Write-Host "        │   5) Uninstall                         │"
+    Write-Host "        │   6) Exit                              │"
     Write-Host "        ╰────────────────────────────────────────╯"
     Write-Host ""
 
@@ -113,10 +114,17 @@ while ($true) {
         }
 
         "3" {
-            Toggle-Mode
+            Clear-Host
+            powershell.exe `
+                -ExecutionPolicy Bypass `
+                -File "$ScriptDir\windows\list-trusted-scripts.ps1"
         }
 
         "4" {
+            Toggle-Mode
+        }
+
+        "5" {
             Clear-Host
             Write-Host "Starting uninstall..."
             Start-Process `
@@ -126,7 +134,7 @@ while ($true) {
                 -Wait
         }
 
-        "5" {
+        "6" {
             Clear-Host
             exit
         }

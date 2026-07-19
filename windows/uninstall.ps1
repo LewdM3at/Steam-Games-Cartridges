@@ -12,7 +12,8 @@ Write-Host ""
 # Paths
 ########################################
 
-$InstallFolder = Join-Path $env:LOCALAPPDATA "SteamGameCartridge"
+$InstallFolder = Join-Path $env:ProgramData "SteamGameCartridge"
+$ConfigFolder = Join-Path $env:LOCALAPPDATA "SteamGameCartridge"
 
 $TaskName = "Steam Game Cartridge Monitor"
 
@@ -68,6 +69,28 @@ if (Test-Path $InstallFolder) {
 else {
 
     Write-Host "Install directory not found."
+
+}
+
+
+########################################
+# Remove config and trust data
+########################################
+
+Write-Host "Removing config and trust data..."
+
+
+if (Test-Path $ConfigFolder) {
+
+    Remove-Item `
+        -Path $ConfigFolder `
+        -Recurse `
+        -Force
+
+}
+else {
+
+    Write-Host "Config directory not found."
 
 }
 

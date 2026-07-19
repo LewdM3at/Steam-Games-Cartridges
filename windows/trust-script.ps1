@@ -114,11 +114,27 @@ $Hash = (
 
 
 
-$TrustedHashes = Get-Content $TrustFile
+$TrustedLines = Get-Content $TrustFile
+
+$AlreadyTrusted = $false
+
+foreach ($Line in $TrustedLines) {
+
+    if ([string]::IsNullOrWhiteSpace($Line)) {
+        continue
+    }
+
+    $EntryHash = if ($Line -match '\|') { ($Line -split '\|')[0].Trim() } else { $Line.Trim() }
+
+    if ($EntryHash -eq $Hash) {
+        $AlreadyTrusted = $true
+        break
+    }
+}
 
 
 
-if ($TrustedHashes -contains $Hash) {
+if ($AlreadyTrusted) {
 
     Write-Host "Already trusted."
 
@@ -126,9 +142,12 @@ if ($TrustedHashes -contains $Hash) {
 
 else {
 
+    $Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $SafeLabel = $Label -replace '\|', '/'
+
     Add-Content `
         -Path $TrustFile `
-        -Value $Hash
+        -Value "$Hash|$SafeLabel|$Timestamp|$FoundScript"
 
     Write-Host "Added to trusted scripts."
     Write-Host "If you modify the script later, you will need to run this script again to trust the new version."

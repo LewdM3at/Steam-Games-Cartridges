@@ -32,7 +32,7 @@ else
     USERNAME="$USER"
 fi
 
-USER_HOME=$(eval echo "~$USERNAME")
+USER_HOME=$(getent passwd "$USERNAME" | cut -d: -f6)
 
 echo "Installing for user: $USERNAME"
 echo "Home directory: $USER_HOME"
