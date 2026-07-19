@@ -6,6 +6,8 @@
 # Put this script on your SSD at root level and name it "launch.sh" (without quotes). 
 # The script will be executed when the Cartridge is plugged in.
 
+##############  Steam  ##############
+
 # Navigate to game's page
 steam steam://nav/games/details/1091500
 
@@ -20,4 +22,21 @@ steam steam://run/1091500
 
 # For other Steam URL Protocol commands check the documentation:
 # https://developer.valvesoftware.com/wiki/Steam_browser_protocol
+
+##############  GoG  ##############
+
+# Path to the game's launch script
+#START_SCRIPT="/path/to/your/game/start.sh"
+
+# Check if the script exists
+#if [ ! -f "$START_SCRIPT" ]; then
+#    echo "Error: $START_SCRIPT not found"
+#    exit 1
+#fi
+
+# Make it executable
+#chmod +x "$START_SCRIPT"
+
+# Start the game
+#"$START_SCRIP
 
