@@ -94,7 +94,7 @@ if grep -qx "$SCRIPT_HASH" "$TRUST_FILE"; then
     echo "Launching cartridge..."
 
     chmod +x "$SCRIPT"
-    bash "$SCRIPT"
+    bash "$SCRIPT" > "$TRUST_DIR/cartridge.log" 2>/dev/null
 
 else
 
