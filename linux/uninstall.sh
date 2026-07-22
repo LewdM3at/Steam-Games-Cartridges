@@ -2,7 +2,7 @@
 
 set -e
 
-echo "Uninstalling Steam Game Cartridge launcher..."
+echo "Uninstalling PC Cartridge System..."
 
 ########################################
 # Check root
@@ -66,6 +66,7 @@ USER_HOME=$(eval echo "~$USERNAME")
 echo "Removing config directory..."
 
 rm -rf "$USER_HOME/.config/steam-games-cartridges"
+rm -rf "$USER_HOME/.config/pc-cartridge-system"
 
 
 ########################################
@@ -87,6 +88,6 @@ udevadm trigger
 
 echo ""
 echo "=========================================="
-echo " Steam Game Cartridge removed"
+echo " PC Cartridge System removed"
 echo "=========================================="
 echo ""
