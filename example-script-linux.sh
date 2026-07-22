@@ -15,28 +15,35 @@ steam steam://nav/games/details/1091500
 steam steam://run/1091500
 
 # Same as run, but with support for mods and non-Steam shortcuts.
-#steam steam://rungameid/1091500
+steam steam://rungameid/1091500
 
 # Same as run, but with support for multiple launch options.
-#steam steam://launch/1091500
+steam steam://launch/1091500
 
 # For other Steam URL Protocol commands check the documentation:
 # https://developer.valvesoftware.com/wiki/Steam_browser_protocol
 
-##############  GoG  ##############
+# Launch Steam DRM-Free games without Steam
+
+
+
+
+#########  GOG / DRM Free Games #########
 
 # Path to the game's launch script
-#START_SCRIPT="/path/to/your/game/start.sh"
+START_SCRIPT="/path/to/your/game/start.sh"
 
 # Check if the script exists
-#if [ ! -f "$START_SCRIPT" ]; then
-#    echo "Error: $START_SCRIPT not found"
-#    exit 1
-#fi
+if [ ! -f "$START_SCRIPT" ]; then
+    echo "Error: $START_SCRIPT not found"
+    exit 1
+fi
 
 # Make it executable
-#chmod +x "$START_SCRIPT"
+chmod +x "$START_SCRIPT"
 
 # Start the game
-#"$START_SCRIP
+"$START_SCRIPT"
+
+
 
