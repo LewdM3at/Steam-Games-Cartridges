@@ -2,6 +2,10 @@
 
 <img src="docs/icon.png" width="96" alt="" />
 
+
+<a href="https://ko-fi.com/harrybma">Support my work!</a>
+
+
 # NVMe Game Cartridges
 
 **Turn M.2 2230 NVMe drives into physical game cartridges.**
